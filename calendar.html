@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ year }}년 {{ month }}월</title>
+    <!-- 현대적인 스타일링을 위한 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full">
+        <div class="flex justify-between items-center mb-6">
+            <!-- 이전 달로 이동하는 링크 -->
+            <a href="/calendar/{{ prev_month_year }}/{{ prev_month }}" 
+               class="text-gray-500 hover:text-gray-800 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <h1 class="text-3xl font-bold text-gray-800">{{ year }}년 {{ month }}월</h1>
+            <!-- 다음 달로 이동하는 링크 -->
+            <a href="/calendar/{{ next_month_year }}/{{ next_month }}" 
+               class="text-gray-500 hover:text-gray-800 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+
+        <table class="w-full border-separate border-spacing-1 text-center">
+            <thead>
+                <tr>
+                    <th class="text-sm font-medium text-red-500">일</th>
+                    <th class="text-sm font-medium text-gray-500">월</th>
+                    <th class="text-sm font-medium text-gray-500">화</th>
+                    <th class="text-sm font-medium text-gray-500">수</th>
+                    <th class="text-sm font-medium text-gray-500">목</th>
+                    <th class="text-sm font-medium text-gray-500">금</th>
+                    <th class="text-sm font-medium text-blue-500">토</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 날짜 리스트를 순회하며 캘린더 그리드 생성 -->
+                {% for day in days %}
+                    <!-- 한 주의 시작마다 새로운 행(<tr>) 시작 -->
+                    {% if loop.index0 % 7 == 0 %}
+                        <tr>
+                    {% endif %}
+                    
+                    <td class="p-2">
+                        {% if day %}
+                            <button class="flex items-center justify-center w-10 h-10 mx-auto rounded-full transition-colors duration-200 hover:bg-blue-200 text-gray-700 font-semibold">{{ day }}</button>
+                        {% else %}
+                            <!-- 빈 칸(None)일 경우 빈 요소로 공간 확보 -->
+                            <div class="h-10 w-10"></div>
+                        {% endif %}
+                    </td>
+                    
+                    <!-- 한 주의 끝(토요일)마다 행(<tr>) 닫기 -->
+                    {% if loop.index % 7 == 0 %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
